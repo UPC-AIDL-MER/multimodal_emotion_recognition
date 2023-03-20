@@ -301,7 +301,7 @@ The next step we think of is putting a bidirectional layer. By making the LSTM b
 
 ![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_2.png)
 
-Looking at these graphs, it is clear what I said before about the power of the LSTM, because it overfits much faster with emb=64. Also comparing prueba3 and prueba5, we see that putting a bidirectional layer makes the training much better, with a better validation loss. Talking about the metrics, the results also get a little bit better as test loss reaches 1.2 wit the same accuracy 0.59.
+The graphs confirm what was previously commented about the power of LSTMs, because it overfits much faster with emb=64. Also comparing prueba3 and prueba5, we see that putting a bidirectional layer makes the training much better, with a better validation loss. Talking about the metrics, the results also get a little bit better as test loss reaches 1.2 wit the same accuracy 0.59.
 
 Now is the moment to try if it gets better with more layers of bidirectional LSTM. The following specifications contain the tests run while increasing the architecture:
   * Prueba 7:
