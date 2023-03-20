@@ -479,5 +479,11 @@ From the graph shown above, we can see that there is no significant improvement 
 
 ## CONLCUSIONS
 
+The results from the initial paper are exposed below:
+|           |   Emotions  |||||||
+|  Models   | anger | disgust | fear  | joy | neutral | sadness | surprise  | w-avg|
+The results from our experimentation are exposed below:
+
+
 ## FUTURE WORK
 - Speech processing: One of the tests we wanted to do if we had more time was to use 16kHz as the target sample rate, and see if it makes any difference in the results.
