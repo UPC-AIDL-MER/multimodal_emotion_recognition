@@ -14,10 +14,10 @@ Table of Contents
     * [Text](#nl-data-processing)
     * [Speech](#speech-dataset-processing)
   * [TEXT ARCHITECTURE](#text-architecture)
-	 * [Simple Multilayer Perceptron (MLP) Classifier](#simple-multilayer-perceptron-mlp-classifier)
-	 * [Long Short Term Memory](#long-short-term-memory)
-   * [Context Model](#context-model)
-   * [Transformer](#transformer)
+	  * [Simple Multilayer Perceptron (MLP) Classifier](#simple-multilayer-perceptron-mlp-classifier)
+	  * [Long Short Term Memory](#long-short-term-memory)
+    * [Context Model](#context-model)
+    * [Transformer](#transformer)
   * [SPEECH ARCHITECTURE](#speech-architecture)
     * [2D CNN ARCHITECTURE](#2d-cnn-classifier)
     * [1D CNN ARCHITECTURE](#1d-cnn-classifier)
@@ -268,9 +268,7 @@ Looking at both graphs, the main conclusion is that there is not a clear advanta
 These is an interesting point to keep talking about. The best results we get on validation loss are around 1.32, at best 1.30. After that, overfitting starts and the training loss we stop around 1.10-1.20. What its interesting is that the results of test loss we are getting are around 1.22 at best, much better that validation loss. This is because the test set is almost of double length than the validation set. So obviously, overfitting is also going to affect the test set, but a little bit later than in the validation set and the best point obviously is going to be better. 
 
 #### LSTM
-LSTMs contain the context of the utterances within the model, therefore we hope that this is sufficient to extract better results from the model.
-
-Our first experiments are with one layer of unidirectional LSTMs and changing the embedding size. These specifications are shown below:
+LSTMs contain the context of the utterances within the model, therefore we hope that this is sufficient to extract better results from the model. Our first experiments are with one layer of unidirectional LSTMs and changing the embedding size. These specifications are shown below:
   * Prueba 0:
     * Embedding: 64
     * LSTM: 64
@@ -283,15 +281,14 @@ Our first experiments are with one layer of unidirectional LSTMs and changing th
   * Prueba 3:
     * Embedding: 32
     * LSTM: 32
-  
 
-*image4*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_1.png)
 
 Looking at the validation loss we see that the best result in terms of overfitting is prueba3, and also that prueba2, with emb=128, gives a kind of overfitting that we didn't see in MLP when we put emb=128. This is a sign that a layer of LSTM is more powerful, and therefore more keen to overfit, than the MLP we tried. 
 
 Talking more about prueba3, we see that the validation loss gets to the typical results we have been getting and also the metrics are already quite good (weighted average = 0.54, test loss = 1.22, test accuracy = 0.59). 
 
-The next step we think of is putting a bidirectional layer. The idea is very logical, because the meaning of the words depend not only on the previous words but also on the following words. The following are the specifications for the bidirectional tests:
+The next step we think of is putting a bidirectional layer. By making the LSTM bidirectional it will be able to obtain context from future words in the text, as well as previous words, this means that we expect the new architecture to somewhat improve the results. The following are the specifications for the bidirectional tests:
   * Prueba 4:
     * Embedding: 64
     * Bidirectional LSTM: 64
@@ -302,7 +299,7 @@ The next step we think of is putting a bidirectional layer. The idea is very log
     * Embedding: 16
     * Bidirectional LSTM: 16
 
-*image5*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_2.png)
 
 Looking at these graphs, it is clear what I said before about the power of the LSTM, because it overfits much faster with emb=64. Also comparing prueba3 and prueba5, we see that putting a bidirectional layer makes the training much better, with a better validation loss. Talking about the metrics, the results also get a little bit better as test loss reaches 1.2 wit the same accuracy 0.59.
 
@@ -314,15 +311,14 @@ Now is the moment to try if it gets better with more layers of bidirectional LST
     * Embedding: 32
     * Bidirectional LSTM: 32, num_layers=4
 
-*image6*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_3.png)
 
-The validation loss curve show as that there is not many differences between them but it seems that prueba8, with 4 Bi-LSTM, starts getting worse results. And also it seems that with 2 Bi-LSTM there is a little better behaviour in relation to overfitting. This is one of the reasons why we will continue using 2 Bi-LSTM. The other reason is that when added a little more dropout to the LSTM
-layer, as in prueba10, we get a weighted average of 0.56 (best until now), a test accuracy of 0.6 and a test loss of 1.19, the first time that we see it go under 1.20.
+The validation loss curve show that there is not many differences between them but it seems that prueba8, with 4 Bi-LSTM, starts getting worse results due to overfitting. It also seems that with 2 Bi-LSTM there is a little better behaviour in relation to overfitting. This is one of the reasons why we will continue using 2 Bi-LSTM. The other reason is that when added a little more dropout to the LSTM layer, as in prueba10, we get a weighted average of 0.56 (best until now), a test accuracy of 0.6 and a test loss of 1.19, the first time that we see it go under 1.20.
   * Prueba 10:
     * Embedding: 32
     * Bidirectional LSTM: 32, num_layers=2, dropout=0.3
 
-*image7*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_3.png)
 
 The last idea we had to try to improve the architecture is to add a little MLP after the LSTM. This tests was run with the following characteristics:
   * Prueba 12:
@@ -332,14 +328,14 @@ The last idea we had to try to improve the architecture is to add a little MLP a
 
 In the following graphs we see that it does not make any significant change, and looking at the metrics, we get the same test loss of 1.19 and accuracy of 0.6.
 
-*image8*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_5.png)
 
 The last two tries worth mentioning are the following. Until now, we were updating with the LSTM the representations of each word. As the batches are of variable length, we need to somehow fix dimensions before sending the vectors to the classifier. What we have used throughout the work is to do the mean of all the vectors of the utterance. At this point, we tried to change it and used the maximum (at each component of the vectors: maximum component 0 of all vectors, maximum component 1...) The results are basically the same, but it is worth mentioning.
 
-The other idea is that, as said, we were changing the representations of the words with the LSTM. but you can also take the last representation of an LSTM, which should have all the meaning of a sentence. I am going to show a comparison between the best result of our previous approach (prueba10) and a result obtained extrapolating the same architecture with the approach just 
-expalined (prueba16). The graphs below show the previous approach may be slightly better, although they are similar. The metrics are quite similar also.
+The other idea is that, as previously mentioned, we were changing the representations of the words with the LSTM. But you can also take the last representation of an LSTM, which should have all the meaning of a sentence. The following is a comparison between the best result of our previous approach (prueba10) and a result obtained extrapolating the same architecture with the approach just 
+expalined (prueba16). The graphs below show the previous approach may be slightly better, although they are similar. The metrics are quite similar.
 
-*image9*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_lstm_6.png)
 
 So this would be the end of the experiments with LSTM. As a recap of MLP and LSTM, both of them get stuck in the same values of val loss (at best 1.30), weighted average (0.56), test loss (around 1.20) and accuracy (around 0.6). It is true that the better metric results tend to be with LSTM, but the difference is very slightly.
 
