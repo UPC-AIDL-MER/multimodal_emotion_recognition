@@ -199,7 +199,7 @@ The initial experimentation with the MLP served to test the relation between the
     * Hidden: 100
     * Dropout: 0.5
 
-*image1*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/tree/main/images)
 
 Two main conclusions came out of this initial experimentation, adding a dropout layer between the embeddings and the hidden layer. This dropout layer provides the regularization necessary for our model not to overfit to the training data (as seen in the figure above attempts 0 and 1 overfit to the training data). Furthermore, we decide to apply *hidden = 2***embedding* to all of the following tests. This stems from the fact that we obtain good results with an initial MLP model. The validation loss does not shown overfitting and reaches a best value of 1.30. And in relation with the test set, we get a weighted F1 score average of 0.53, a test loss of 1.22 and test acc of 0.58. As we keep testing this model and further models, we will see that these initial evaluation metrics are already up-to-par. Therefore, following this trend ensured good results.
 
