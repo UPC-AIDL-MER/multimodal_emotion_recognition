@@ -482,6 +482,7 @@ From the graph shown above, we can see that there is no significant improvement 
 The results from the initial paper are exposed below:
 
 |           |   Emotions  |
+| --------- | ----------- |
 |  Models   |   anger     |
 
 The results from our experimentation are exposed below:
