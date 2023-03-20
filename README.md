@@ -25,6 +25,11 @@ Table of Contents
     * [MLP Classifier](#mlp-classifier)
   * [MULTIMODAL ARCHITECTURE](#multimodal-architecture)
   * [TEXT EXPRIMENTATION](#text-experimentation)
+    * [Utterance-level Classification](#utterance-level-classification)
+      * [MLP](#mlp)
+      * [LSTM](#lstm)
+      * [TRANSFORMERS](#transformers)
+    * [Dialogue-level Classification](#dialogue-level-classification)
   * [CONCLUSIONS](#conclusions)
   * [FUTURE WORK](#future-work)
 
