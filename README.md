@@ -14,9 +14,15 @@ Table of Contents
     * [Text](#nl-data-processing)
     * [Speech](#speech-dataset-processing)
   * [TEXT ARCHITECTURE](#text-architecture)
-	 * [Simple MLP Classifier](#optical-flow)
-	 * [RNN Model](#rnn-model)
+	 * [Simple Multilayer Perceptron (MLP) Classifier](#simple-multilayer-perceptron-mlp-classifier)
+	 * [Long Short Term Memory](#long-short-term-memory)
+   * [Context Model](#context-model)
+   * [Transformer](#transformer)
   * [SPEECH ARCHITECTURE](#speech-architecture)
+    * [2D CNN ARCHITECTURE](#2d-cnn-classifier)
+    * [1D CNN ARCHITECTURE](#1d-cnn-classifier)
+    * [LSTM Classifier](#lstm-classifier)
+    * [MLP Classifier](#mlp-classifier)
   * [MULTIMODAL ARCHITECTURE](#multimodal-architecture)
   * [TEXT EXPRIMENTATION](#text-experimentation)
   * [CONCLUSIONS](#conclusions)
@@ -324,7 +330,7 @@ The last idea we had to try to improve the architecture is to add a little MLP a
     * Embedding: 32
     * Bidirectional LSTM: 32, num_layers=2, dropout=0.3
     * Linear: 128
-    
+
 In the following graphs we see that it does not make any significant change, and looking at the metrics, we get the same test loss of 1.19 and accuracy of 0.6.
 
 *image8*
