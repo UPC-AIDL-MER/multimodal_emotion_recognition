@@ -365,26 +365,24 @@ As there is not many more parameters to change, the results of the transformers 
 
 ### Dialogue-level classification
 
-Although the hyperparameter space is very big and maybe we have missed a different architecture that gives better results, it really seems that with one model, we reach the best results we can get with easy to implement architectures. This feeling is confirmed looking at the benchmark results of the MELD paper (2017), where text models reach similar F-scores and accuracys. But looking at how we did the training, we did batches of random utterances of similar length so that we had to include the less padding as possible. But now, we can have for each of these sentences a feature vector, with the same dimension for each sentence. Let's exploit this characteristic to do a second training of a second model. What we want of this new model is to take as inputs the feature vectors of the utterances of a dialogue. So we will pass dialogue by dialogue to this new model and we expect to change a little bit the representation of each utterance based on the context of the dialogue, based 
-on the influence of the other utterances. 
+Although the hyperparameter space is very big and maybe we have missed a different architecture that gives better results, it really seems that with one model, we reach the best results we can get with easy to implement architectures. This feeling is confirmed looking at the benchmark results of the MELD paper (2017), where text models reach similar F-scores and accuracys. But looking at how we did the training, we did batches of random utterances of similar length so that we had to include the less padding as possible. Now, we can have for each of these sentences a feature vector, with the same dimension for each sentence. Let's exploit this characteristic to do a second training of a second model. What we want of this new model is to take as inputs the feature vectors of the utterances of a dialogue. So we will pass dialogue by dialogue to this new model and we expect to change a little bit the representation of each utterance based on the context of the dialogue, based on the influence of the other utterances. 
 
-So the idea is to extract the feature vectors from the first model, when it is correctly optimized through training. Then we reorder all the vectors so that they are correctly sorted in their dialogue. Lastly, we send, dialogue by dialogue, the new data to the second model and try to optimize it. 
+The idea is to extract the feature vectors from the first model, when it is correctly optimized through training. Then we reorder all the vectors so that they are correctly sorted in their dialogue. Lastly, we send, dialogue by dialogue, the new data to the second model and try to optimize it. 
 
-As the second model is a "context-model", we decided that a good choice would be to implement a LSTM architecture. For the first model we will start using the best results from the MLP/LSTM models in the previous section, and maybe modify them a little bit. As a lot of the discussion has been made 
-before, now the tries made will be less.
+As the second model is a "context-model", we decided that a good choice would be to implement an LSTM architecture. For the first model we will start using the best results from the MLP/LSTM models in the previous section, and maybe modify them a little bit. As a lot of the discussion has been made before, the tests in this section will be based on the conclusions extracted in the previous section.
 
 "The last detail to mention before starting the experiments is that now we tried to change from batch size 10 to 100 in the first model. This should make it a little bit more robust to outliers, but in the practice the results are the same, only that we need more epochs to run." 
 
-Let's start the experiments applying a MLP as the first model. It will be the one with the best result we got, which to remember is a embedding size of 64 and two hidden layers with 128 neurons each. Then the second model, also taking the best structure found, is a 2 layer LSTM. At first we don't try it bidirectional because we think a future utterance should influence the emotion of a previous utterance. But later we will try the change. 
+Let's start the experiments applying a MLP as the first model. It will be the one with the best result we got, which to remember is a embedding size of 64 and two hidden layers with 128 neurons each. Then the second model, also taking the best structure found, is a 2 layer LSTM. At first we don't try it bidirectional because we think a future utterance should influence the emotion of a previous utterance. But later we will attempt to change this. 
 
-*image14*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_1.png)
 
 Now, let's show the performance of both models in this first experiment. The graph of the training loss makes a lot of sense. We could say that the data of the "model0" is the "raw data" so at first the model needs to learn the embeddings of each word, start to learn the relations of them with the  emotions... but the "model1" has as data optimized feature vectors that already have a lot of information condensed, so the loss of the second model starts much lower although its parameters are randomly initialized. But talking about the validation loss we see that in model0 behaves well but finish in clear overfitting, and in model1 starts already in overfitting and there is not 
 improvement.
 
 Now we will show another try in which now is the moment we changed from batch size 10 to 100, therefore we increase a little bit the epochs we run, and also add a dropout at the start of the second model. 
 
-*image15*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_2.png)
 
 The main difference in the validation loss in comparison with the previous graphs is that at the end of the model0 optimization, is not in a clear overfitting situation. Therefore, we give model1 a good starting point which, thanks to the context of the dialogue, is able to break the barrier we had of val loss being always greater than 1.30. In this simulation we can see it goes down 1.30 and 
 reaches 1.27 in epoch 5.
@@ -393,14 +391,14 @@ Talking about the metrics, both model0 and model1 have a test loss of 1.22 and t
 
 We will continue testing this approach but we have already seen its power. When simulating model0 to its optimization point (not overfitting), adding the dialogue context with model1 helps to generalize the results and decrease a little bit more the validation loss in comparison to model0, breaking a barrier we could never break with our previous models without dialogue context. In our previous experiments, MLP results were not affected at all if we put 2 or 3 layers and LSTM worked a little bit better if its dimension was a little bit smaller than 128. Therefore, let's try now and MLP with embedding size of 32 and a hidden of 64, and so the LSTM entering dimension will also be of 64.
 
-*image16*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_3.png)
 
 In model0 we could run for 40 epochs until a sign of flattening could be seen. Model1 overfits more so that is why we stop in epoch 10. But the results continue to be the expected. We can see model0 is unable to go below 1.30 in 40 epochs, but when added the dialogue context, the validation loss drops and reaches now 1.25, the best result found. Although this does not transalate to the metrics (test loss = 1.22 for both and accuracy of 0.57 and 0.58 respectively), this result means that the model is learning how to generalize a little bit more thanks to the context.
 
 Our last try in this approach is going to use two LSTM, one for each model. The reason is because we decided at the end of the first part of the discussion that LSTM approach was the one which gave better metrics with also a good validation loss (go back Table and graph comparing MLP/LSTM/Transformer). So we are going to build a model0 with embedding size of 32 and a 2 layer 
 bidirectional LSTM, and a context model1 with a 2 layer LSTM (no bidirectional) of input size 64.
 
-*image17*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_4.png)
 
 Results are interesting. Val loss of model1 is below the one of model0, reaching in a point 1.28 but on 1.30 on average. Visually the behaviour is a little bit worse than in previous experiments. But, both model0 and model1 metrics are better. Both of them have a test loss of 1.18 but an accuracy of 0.6 (model0) and 0.62 (model1). This last value is the best test accuracy obtained until now. 
 
@@ -410,15 +408,15 @@ Now we make a quick explanation of another way we tackle the problem of dialogue
 
 The experiment we run of this approach is a model0 of embedding size 64 and hidden 128 with a 2 layer LSTM with input size of 128. At first we choose batch size of 100 and 15 epochs.
 
-*image18*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_5.png)
 
 We see on the graph the training and validation loss. Taking a look more to the validation, the validation loss of model1 is always better than the one of model0, which makes sense. Also, as there is not overfitting in model0, the best results of both validations are in the last epoch, which is logical also. According to the metrics, model0 has a test loss of 1.23 and accuracy of 0.58, while model1 has a test loss of 1.21 and accuracy of 0.6. So everything makes sense. But we are going to do the same experiment for more epochs, because val loss in model0 is 1.34 (and val loss is 1.29 in model1) and we know it can get lower. As there is not overfitting yet, we can try to do more epochs. 
 
-*image19*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_6.png)
 
 In this graph we show now 30 epochs. Val loss in model0 is now around 1.32 and getting flat in the last epochs. But thanks to this decrease, val loss in model1 reaches now 1.27. Also, the improvement in the metrics continue, having model0 a test loss of 1.21 and accuracy of 0.59 and model1 a test loss of 1.2 and accuracy of 0.61.
 
-*image20*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_dialogue_7.png)
 
 In this last try we run for 50 epochs. We now see the overfitting and that the epoch in which the validation loss has a minimum in model0 is the same epoch of the minimum of model1. The behaviour is the same for both validation losses, but the one of model1 is always below. This basically is another proof of the help of the dialogue context in the learning of our model.
 
