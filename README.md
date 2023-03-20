@@ -175,18 +175,29 @@ The 2D CNN Classifier model consists of the following layers:
   * **Global Average Pooling**: This layer takes the output tensor of the convolutional layers and calculates the average value of each channel across the spatial dimensions of the tensor. This results in a single feature vector for each input sample, which is then passed through the linear layer to produce the final classification.
 
 ### 1D CNN Classifier
+The 1D CNN Classifier model consists of the following layers:
+  * **Instance normalization layer**: This layer performs normalization on the input along the channel dimension.
+
+  * **Dropout layer**: This layer randomly drops some of the connections to prevent overfitting.
+
+  * **Convolutional layers**: This layer consists of two convolutional layers with kernel sizes of 3 and 128 and a stride of 1. The first layer has 4 times the number of filters as the number of input channels. The output of each convolutional layer is followed by a max pooling layer with a kernel size of 2 and a stride of 2. Both convolutional layers use the ReLU activation function.
+
+  * **Linear layer**: This layer takes the output of the convolutional layers and performs a linear transformation to map it to the output size.
+
+  * **Global Average Pooling**: This layer averages the output of the last convolutional layer along the time dimension.
 
 ### LSTM Classifier
 
 ### MLP Classifier
 
 ## MULTIMODAL ARCHITECTURE
+In order to tie these two together, we propose a similar architecture to that used in the paper. We will train a model on the audio data and a different model on the text data, we will then exract the feature vectors of each utterance for both the text representations and the speech representations of the data. We will use the best models selected in the experimentation steps for both speech and text to extract the feature vectors. We will then train a model using the concatenated versions of these feature vectors.
 
 ## TEXT EXPERIMENTATION
 Once our models have been decided, the next important step is to run experimentation over the resulting models with the preprocessed dataset. For these, the following constraints applied:
   * The dataset is divided in 9989 training utterances, 1109 validation utterances and 2610 test utterances. 
   * All models are trained with an Adam optimizer with learning rate 1e-3
-  * The test batch size was chosen to always be 100 (?)
+  * The test batch size was chosen to always be 100
 
 ### Utterance-level classification
 The intial proposal was to train the model using batches of random utterances. This form of training resolves the issue of having different pad lengths for different examples. Batching this data by similar length, we make sure that we minimize the padding requirements in our model. Training the model in an utterance level poses one main issue: it kills the context of the text, we will be sending together utterances pertaining to different episodes, seasons, etc. This will be further explored in the dialogue-level classisifcation.
@@ -428,6 +439,41 @@ In this last try we run for 50 epochs. We now see the overfitting and that the e
 So the conclusion after these tries is that the dialogue context obviously helps reducing the validation loss and that the optimum point of this approach is when model0 reaches the minimum of validation loss, that if your remember is what we did before. Optimize model0, get the feature vectors and optimize the context model, model1.
 
 ## SPEECH EXPERIMENTATION
+Once our models have been decided, the next important step is to run experimentation over the resulting models with the preprocessed dataset. For these, the following constraints applied:
+  * Each utterance has a vector of dimention 1611.
+  * The dataset is divided in 9989 training utterances, 1109 validation utterances and 2610 test utterances. 
+  * All models are trained with an Adam optimizer with varying learning rates. This is because we attempted to use the same learning rate for all tests but with the previously proposed dataset the model did not learn properly.
+  * The test batch size was chosen to always be 100.
+
+### Utterance-level Speech Classification
+
+For our base model we will use the model proposed by MELD in github. This is an LSTM with the following hyperparameters:
+  * epochs: 30
+  * lr: 1e-4
+  * batch: 50
+
+The results obtained are portrayed in the graph below. 
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/speech_lstm_1.png)
+
+Fruther testing with different parameters was required.
+
+**Test 2:**
+  * epochs: 30
+  * lr: 1e-5
+  * batch: 50
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/speech_lstm_2.png)
+
+As is expected, the model grossley underperforms compared to the previous results seen in the text experimentation. It is clear that it is harder to extract relevant information from speech than from text. This is reflected through worse metrics in speech compared to those in text; higher loss, lower accuracies, high amounts of epochs required to reflect training on the model, etc.
+
+### Dialogue-level Speech Classification
+
+The same way as we trained the initial models in the text classification, the previous models were tested in utterance level batchings that were randomized. In order to test the importance of context we will use the same context model exposed in the text section and will compare that shown in the results shown in the utterance-level speech classification section with those extracted from this model.
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/speech_dialogue_1.png)
+
+From the graph shown above, we can see that there is no significant improvement in the minimum validation loss from using context. Although we do see a decrease a small decrease of the validation loss, it is not enough to compare this to the results obtained from experimentation with the textual data. This highlights the difficulty of extracting information relvant to emotion classification from speech.
 
 ## MUTLIMODAL EXPERIMENTATION
 
