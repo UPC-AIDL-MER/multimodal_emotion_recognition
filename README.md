@@ -341,23 +341,23 @@ So this would be the end of the experiments with LSTM. As a recap of MLP and LST
 
 #### Transformers
 
-The last type of architectures we are going to use are called transformers. According to the literature, transformers and attention performance should be great, as they were vital in the improvements of results in the NLP field. We will start our experiments with a configuration of embedding size 128 and we will try different numbers of encoders and of heads in the multiattention block. What we will never change is that the dimension of the feedforward block is 4*embedding.
+According to the literature, transformers and attention performance should be great, as they were vital in the improvements of results in the NLP field. We will start our experiments with a configuration of embedding size 128 and we will try different numbers of encoders and of heads in the multiattention block. What we will never change is that the dimension of the feedforward block is 4*embedding.
 
-*image10*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_transformers_1.png)
 
 We can see that it is overfitting since the first moment. That is not surprising as these models are huge and the power of overfitting is very high. A dropout helps to see that this configuration works.
 
-*image11*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_transformers_2.png)
 
 The best value of validation loss we get is 1.35. Metric are not bad as we get a test loss of 1.25 and accuracy of 0.58. But there should be room for improvement. 
 
 We now want to check how the results change adding more encoders. The results are not good, the model does not learn at all. The loss increases since epoch 1 as in the following example of 4 heads and 4 encoders (prueba1). But the same happens in other combinations as 8 heads 4 encoders or 8 heads 8 encoders.
 
-*image12*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_transformers_3.png)
 
 This makes us continue in the path of 2 encoders and 8 heads, which were the best results before. Using a lesson of the past results, where we see that using a smaller embedding dimension felt good to a powerful architecture as LSTM, we now try to reduce the embedding size previously used.
 
-*image13*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_transformers_4.png)
 
 We can see that the results on the validation loss are similar, quite noisy and with a best val loss of 1.35. On the metrics, it improves a little bit to a test loss of 1.22 and a accuracy of 0.6, but continue to be results that we also get with MLP and LSTM. 
 
