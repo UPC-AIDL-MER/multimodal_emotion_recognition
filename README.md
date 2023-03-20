@@ -480,8 +480,10 @@ From the graph shown above, we can see that there is no significant improvement 
 ## CONLCUSIONS
 
 The results from the initial paper are exposed below:
-|           |   Emotions  |||||||
-|  Models   | anger | disgust | fear  | joy | neutral | sadness | surprise  | w-avg|
+
+|           |   Emotions  |
+|  Models   | anger |
+
 The results from our experimentation are exposed below:
 
 
