@@ -223,7 +223,7 @@ With some initial testing, the next logical step was to research the best embedd
 
 Prueba 3, Prueba 4 and Prueba 6 gave the most prominent results, therefore we will be using these as a comparison base. Prueba 5 was done with a very large embedding size and the model overfit very quickly to the training data.
 
-*image2*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_mlp_2.png)
 
 As you can see in these graphs, for a small embedding size as emb=16, the model is slower at learning due to its diminished capacity. For a bigger capacity as emb=128, learning is faster but it gives more problems of overfitting. The best result in this trade-off of overfitting and learning will be choosing emb=64, although emb=128 does not show bad results we do see a slight trend to overfitting. There is not major progress surrounding the metrics. The best ones are obtained in prueba6 and are the same as in prueba2. Best val loss 1.32, weighted averaage of 0.53, test loss of 1.22 and accuracy of 0.58. From these tries we conclude that a embedding size of [50,150] and hidden=2*emb is obtains the best results.
 
@@ -261,12 +261,11 @@ The next logical line of research is to increase the size of the model, to initi
 
 Although many tests were run, for the purpose of comparison we have decided to extract the best between both architectures to be able to extract conclusions from the model.
 
-*image3*
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/text_mlp_3.png)
 
-Looking at both graphs, the main conclusion is that there is not a clear advantage of making our model with one more layer. But what is curious and the reason I show this example of prueba8 is that the metrics are a little bit better. We reach a weighted average of 0.55, test loss of 1.21 and accuracy of 0.6. Not a huge increase, but these are thebetter metrics I get with an MLP 
-model.
+Looking at both graphs, the main conclusion is that there is not a clear advantage of making our model with one more layer. What is curious about the examples shown in the graph, is that the metrics in prueba8 are a little bit better. We reach a weighted average of 0.55, test loss of 1.21 and accuracy of 0.6. Although not a huge increase, these are the slightly better metrics obtained with an MLP model.
 
-These is an interesting point to keep talking about. the best results we get on validation loss are around 1.32, at best 1.30. After that, overfitting starts. And the training loss we stop around 1.10-1.20. What its interesting is that the results of test loss we are getting are around 1.22 at best, much better that validation loss. In my opinion this is because the test set is almost of double length than the validation set. So obviously, overfitting is also going to affect the test set, but a little bit later than in the validation set and the best point obviously is going to be better. 
+These is an interesting point to keep talking about. The best results we get on validation loss are around 1.32, at best 1.30. After that, overfitting starts and the training loss we stop around 1.10-1.20. What its interesting is that the results of test loss we are getting are around 1.22 at best, much better that validation loss. This is because the test set is almost of double length than the validation set. So obviously, overfitting is also going to affect the test set, but a little bit later than in the validation set and the best point obviously is going to be better. 
 
 #### LSTM
 LSTMs contain the context of the utterances within the model, therefore we hope that this is sufficient to extract better results from the model.
