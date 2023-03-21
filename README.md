@@ -8,6 +8,7 @@ Table of Contents
 =================
 
   * [INTRODUCTION AND MOTIVATION](#introduction-and-motivation)
+  * [GOALS](#goals)
   * [BACKGROUND](#background)
   * [DATASET](#dataset)
   * [DATASET PREPROCESSING AND PREPARATION](#dataset-processing)
@@ -34,6 +35,26 @@ Table of Contents
   * [FUTURE WORK](#future-work)
 
 ## INTRODUCTION AND MOTIVATION
+Multimodal speech recognition is a specific application of multimodal data analysis that combines different channels of information to accurately recognize emotions from speech. This involves analyzing not only the acoustic features of speech but also the visual and textual cues, such as facial expressions and spoken words, to provide a more comprehensive understanding of the emotional state of the speaker.
+
+One of the key motivations for multimodal speech recognition is its potential to improve human-computer interaction. By accurately recognizing a user's emotional state, a computer or virtual assistant can adapt its responses and interactions to better suit the user's needs, leading to a more natural and intuitive user experience.
+
+Furthermore, multimodal speech recognition has the potential to enhance mental health diagnosis by providing a more objective and accurate assessment of a patient's emotional state. This can help clinicians make more informed decisions about treatment and therapy.
+
+Finally, multimodal speech recognition can also be used to address societal issues, such as social inequality and communication barriers. By accurately recognizing emotions from speech, it can help improve communication between individuals from different cultures or with different communication styles, ultimately leading to more inclusive and diverse societies.
+
+Overall, multimodal speech recognition is a rapidly growing field with tremendous potential for impact in various domains. By combining multiple channels of information, it offers a more accurate and nuanced understanding of human emotions, which can lead to improvements in a wide range of applications.
+
+## GOALS
+For this project, we wanted to explore multimodal data analysis from a scientific perspective. Our main goals are descibed below:
+  * Understanding State-of-the-Art Multimodal Research
+    * Extensively research state-of-the-art applications of multimodal architectures
+    * Find accessible data pertaining to emotion detection in a multimodal scope
+
+  * Implementing and Evaluating Fully-Functional Deep Learning Architecture able to Classify Emotions
+    * Experiment with different Deep Learning Architectures for Emotion Recognition
+    * Learn how to integrate multimodal data
+    * Learn and experiment with augmented data (stretch goal)
 
 ## BACKGROUND
 
@@ -188,7 +209,7 @@ The 1D CNN Classifier model consists of the following layers:
 
 ### LSTM Classifier
 
-### MLP Classifier
+This is the same classifier as that proposed in the text section, this classifier will be adapted to take in the processed audios with the correct size.
 
 ## MULTIMODAL ARCHITECTURE
 In order to tie these two together, we propose a similar architecture to that used in the paper. We will train a model on the audio data and a different model on the text data, we will then exract the feature vectors of each utterance for both the text representations and the speech representations of the data. We will use the best models selected in the experimentation steps for both speech and text to extract the feature vectors. We will then train a model using the concatenated versions of these feature vectors.
@@ -476,17 +497,17 @@ The same way as we trained the initial models in the text classification, the pr
 From the graph shown above, we can see that there is no significant improvement in the minimum validation loss from using context. Although we do see a decrease a small decrease of the validation loss, it is not enough to compare this to the results obtained from experimentation with the textual data. This highlights the difficulty of extracting information relvant to emotion classification from speech.
 
 ## MUTLIMODAL EXPERIMENTATION
+The multimodal experimentation was done by running a model with the feature vectors extracted from the individual speech/text models.
 
 ## CONLCUSIONS
 
 The results from the initial paper are exposed below:
 
-|           |   Emotions  |
-|           | ----------- |
-|  Models   |   anger     |
 
 The results from our experimentation are exposed below:
 
 
 ## FUTURE WORK
-- Speech processing: One of the tests we wanted to do if we had more time was to use 16kHz as the target sample rate, and see if it makes any difference in the results.
+  * **Data Augmentation**: An initial idea in order to test the functioning of our model in different situations, was generate more data from the pre-existing MELD dataset. This was specifically thought out for the speech section by adding noise to the spectrograms. Using this augmented data to train the models would have given us more room to work with the speech model and potentially have impacted the metrics of the model.
+  * **Audio Preporcessing and Usage**: Currently there are many techniques being used to extract usable data from audios, given more time we would have been able to play around with different audio processing techniques to be able to find which was more efficient. As mentioned in the previous sections 1D and 2D CNN Classifiers were not capable of learning with the data that we had, we could have further experimented with techniques to make these properlly work and extract useable data. Other ideas we could have experimented with wav2vec to generate features, amongst others.
+  * **Add visual data**: In order to reduce the complexity of our model we opted to add text and speech data rather than include all three aspects of the mutlimodal capacity of the data. In this way, we could make our model better by adding the facial queues and movement queues incluedd in the video of the tv show. Although this might not provide as much information as the textual data (in the same form that the speech model was not able to reach the same results as the text model) it adds context so our multimodal model is able to properly contextualize the situation.
