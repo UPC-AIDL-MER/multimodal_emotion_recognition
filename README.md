@@ -499,10 +499,10 @@ The same way as we trained the initial models in the text classification, the pr
 
 From the graph shown above, we can see that there is no significant improvement in the minimum validation loss from using context. Although we do see a decrease a small decrease of the validation loss, it is not enough to compare this to the results obtained from experimentation with the textual data. This highlights the difficulty of extracting information relvant to emotion classification from speech.
 
-## MUTLIMODAL EXPERIMENTATION
+## MULTIMODAL EXPERIMENTATION
 The multimodal experimentation was done by running a model with the feature vectors extracted from the individual speech/text models.
 
-## CONLCUSIONS
+## CONCLUSIONS
 
 The results from the initial paper are exposed below:
 
