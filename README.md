@@ -537,12 +537,34 @@ If we look at the metrics, using "text with context" leaves them practically the
 
 
 ## CONCLUSIONS
+Throughout the explanation of the text, audio and multimodal experiments, we have already reached some conclusions. In this section we will make a quick recap of them and also compare our best results with the results obtained in the paper of the MELD dataset.
 
-The results from the initial paper are exposed below:
+The first clear conclusion is that in this dataset it is easier to extract the emotions from text than from audio. The losses obtained in the text models are much lower than in audio models and therefore, the accuracies are higher for text. We do not want to generalize more this assumption, but according to our knowledge, it is quite hard nowadays to learn to recognize emotions from audio, not only with our dataset.
 
+Another important point that we reach is related with the scarcity of the dataset and the search of architectures. As we are using a small imbalanced dataset, the best results we reach are similar with different arquitectures, as happened when we tried MLP , LSTM and Transformers with text. In principle Transformers should give a boost in our results, but as our dataset is small, it reaches the same results than a more simple LSTM architecture and needing more time for each simulation. So an important conclusion could be to find always the best architecture adapted to the dataset.
 
-The results from our experimentation are exposed below:
+A very important conclusion we got from this study is the relevance of context in detecting emotions. When sending batches of random utterances to our model, it reaches a flattening in the validation curve around a value that we could not improve with changes of hyperparameters, architectures... But when we send the utterances sorted in each dialogue, we were able to improve the generalization of the model and decrease the best point in the validation curve we obtained before.
 
+Let's show the metrics (F-score of each of the emotions in the dataset, weighted average and the loss and accuracy obtained in the test data) of our best results:
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/table_1.png)
+
+Loooking fast through the table we see that in text modality all of the architectures give similar metrics. For us, the best approach taking into account performance and time needed is the LSTM. We can see also that when adding context the weighted average, test loss and accuracy improve. Also is not shown but the main improvement is the decrease in the validation loss already explained.
+
+When looking at speech and comparing with the text results, we see the metrics are much worse and the model is able only to recognize 3 of the 7 emotions. This difference is why we cannot see a huge improvement in the metrics of the Multimodal experiment. The results are mainly the same as the ones obtained only with text.
+
+A last remark is that most of the models are unable to detect emotions such as fear or disgust. This is because the dataset is imbalanced and therefore it is not able to learn from few examples. It could be interesting to do data augmentation on this emotions.
+
+Now instead of comapring the results betweeen them let's compare them with the results in the MELD paper:
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/table_2.png)
+
+It is clear that our models perform at least similar to the models they show here. Our weighted averages in text are also of the order of 0.55 or even better and in audio is a little bit less than 0.39 but close. The only difference, taking a look to the results of multimodality is that they are able to improve more or less a 2% the weighted average when fusing text and audio. In our experiment didn't not happen but we saw an improvement in the validation loss when adding audio. So the main conclusion we get is that, if we do a bigger statistical sample of our results, they are at least as good as the results they get in the MELD paper.
+
+Another metric that its not shown in the table but we could find in (https://paperswithcode.com/sota/emotion-recognition-in-conversation-on-meld?metric=Accuracy) is that they claim to reach an accuracy of around 60 % which is the same we got or even a little bit worse than the 62%
+accuracy we got with text with context.
+
+So, as a summary, in our goal of recognizing emotions in speech we workedwith the text and the audio and realized that text gave better results. We were able to try different architectures, apply hyperparameter tuning and tackle important problems in Deep Learning as ovefitting. We also found the power of context for helping our models generalize better and get a better representation of the emotions. Lastly, we tried to merge the channels of text and audio in a multimodal model and, although the metrics remain similar, we found that it also helped a little bit to generalize so we beleive it has potential to improve the results in other works where the audio dataset is better.
 
 ## FUTURE WORK
   * **Data Augmentation**: An initial idea in order to test the functioning of our model in different situations, was generate more data from the pre-existing MELD dataset. This was specifically thought out for the speech section by adding noise to the spectrograms. Using this augmented data to train the models would have given us more room to work with the speech model and potentially have impacted the metrics of the model.
