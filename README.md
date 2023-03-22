@@ -98,6 +98,9 @@ Here are some academic aspects of the MELD dataset:
 
   * Challenges: Despite its size and diversity, the MELD dataset has some limitations, such as its focus on a single TV show and its annotation scheme, which only includes a limited set of emotional states. However, ongoing research is addressing these limitations by developing new annotation schemes and collecting additional data from diverse sources.
 
+A sample dialogue is shown below:
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/dataset.png)
+
 ## DATASET PREPROCESSING AND PREPARATION
 Multimodal preprocessing for MELD typically involves several steps. First, the audio data must be transformed into a usable format, such as Mel-frequency cepstral coefficients (MFCCs), which are commonly used in speech recognition tasks. Finally, the text data must be preprocessed to remove stop words and perform tokenization, stemming, and other natural language processing techniques. Since we are not using the visual data for the initial implementation, we can exclude the preprocessing requirements for visual data.
 
@@ -180,6 +183,18 @@ The context classifier model consists of the following layers:
   * **Linear classifier layer**: This layer is an instance of nn.Linear and is responsible for classifying the input sequence into one of seven emotion classes. The input shape of the layer is (nº utterance/dialogue, vec_dim) and the output shape is (nº utterance/dialogue, 7).
 
 ### Transformer
+
+This is a PyTorch implementation of a transformer-based model for text classification. The model takes in a batch of text sequences in the form of token indices, and passes them through the following layers:
+
+  * **Embedding layer**: This layer converts the token indices into dense embeddings of a fixed dimension, specified by embedding_dim.
+
+  * **Positional Encoding layer**: This layer adds positional information to the embeddings. It generates a fixed-size matrix of positional encoding vectors, where each vector corresponds to a position in the sequence. The encoding vectors are added element-wise to the token embeddings.
+
+  * **Transformer Encoder layer**: This layer is a stack of num_encoders identical Transformer encoder layers. Each encoder layer contains multi-head self-attention mechanism and a feed-forward neural network. The output of the previous encoder layer is fed as input to the next encoder layer.
+
+  * **Classification layer**: This layer takes the output of the last Transformer encoder layer, computes the mean across the time dimension, and passes the result through a linear layer with output size 7, corresponding to the number of classes to be classified.
+
+The model also uses dropout regularization at various stages to prevent overfitting.
 
 ## SPEECH ARCHITECTURE
 
