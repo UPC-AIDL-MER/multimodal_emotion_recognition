@@ -501,7 +501,25 @@ From the graph shown above, we can see that there is no significant improvement 
 
 ## MUTLIMODAL EXPERIMENTATION
 The multimodal experimentation was done by running a model with the feature vectors extracted from the individual speech/text models. An initial model was trained on concatenated feature vectors with the following characteristics:
-  * 
+  * LSTM: 32
+
+The results obtained from this initial experimentation are shown in the graph below.
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/multimodal_1.png)
+
+The next experimentation step for the multimodal architecture was to add the context to the text dialogue without adding the audio (what was previously done in the text). This increases slightly the validation loss, but overfitting tends to occur quickly and in general the metrics tend to stay pretty constant.
+
+This will then be compared to the process of concatenating first the feature vectors and then adding the context dialogue by dialogue. The architecture that we will be using to run this experiment is described below:
+  * LSTM: 664, num_layers=2, dropout=0.3
+
+The best results were obtained with 10 epochs and a learning rate of 1e-4.
+
+![alt text](https://github.com/UPC-AIDL-MER/multimodal_emotion_recognition/blob/main/images/multimodal_2.png)
+
+It can be seen in the validation loss that adding audio seems to help reduce the validation loss, or at least we can ensure that it is not harmful. The minimum value it reaches is 1.28, which is one of the values we used to obtain in some cases only with text (and its context, of course). More tests will have to be done, but at least it seems that the way of fusing and adding multimodal information helps the model to generalize.
+
+If we look at the metrics, using "text with context" leaves them practically the same (weighted average 0.54, test loss 1.23, and accuracy 0.59), and by adding audio, they improve to a weighted average of 0.55, test loss 1.19, and accuracy 0.6. Again, these are some of the best results obtained if we compare them with the text section, but it is not a breakthrough either. Also, it should be noted that only one simulation has been done. To try to eliminate statistical error, the simulation would have to be repeated several times.
+
 
 ## CONLCUSIONS
 
